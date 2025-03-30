@@ -6,7 +6,7 @@
     <defs>
         <g id="polygon" fill="black">
             <polygon points="119.32,105.18 114.14,114.14 105.18,119.32 94.82,119.32 85.86,114.14 80.68,105.18 80.68,94.82 85.86,85.86 94.82,80.68 105.18,80.68 114.14,85.86 119.32,94.82"/>
-            <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="4s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="3s" repeatCount="indefinite"/>
         </g>
 
         <g id="figure">
