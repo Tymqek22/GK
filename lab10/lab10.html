@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tower - Orbit View</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="three.js-master/build/three.js"></script>
+  <script src="resources/OrbitControls.js"></script>
+
+  <script>
+    "use strict";
+
+    var canvas, renderer, scene, camera;
+
+    var controls;
+
+    var animating = false;
+    var frameNumber = 0;
+
+    var rook;
+
+    function init() {
+      canvas = document.createElement("canvas");
+      document.body.appendChild(canvas);
+
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setClearColor("black");
+
+      scene = new THREE.Scene();
+
+      camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.z = 30;
+
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+      directionalLight.position.set(10, 10, 10);
+      scene.add(directionalLight);
+
+      const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+      scene.add(ambientLight);
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+      rook = new THREE.Group();
+      scene.add(rook);
+
+      const base = new THREE.Mesh(
+        new THREE.CylinderGeometry(3,3.5,1,32),
+        new THREE.MeshStandardMaterial({ color : 0xffffff })
+      );
+      base.position.y = -1.5;
+      rook.add(base);
+
+      const body = new THREE.Mesh(
+        new THREE.CylinderGeometry(2, 2.2, 5, 32),
+        new THREE.MeshStandardMaterial({ color : 0xffffff })
+      );
+      body.position.y = 1.5;
+      rook.add(body);
+
+      const head = new THREE.Mesh(
+        new THREE.CylinderGeometry(2.5, 2.5, 1.2, 32),
+        new THREE.MeshStandardMaterial({ color : 0xffffff })
+      );
+      head.position.y = 4.6;
+      rook.add(head);
+
+      const numTeeth = 6;
+      const toothWidth = 1;
+      const toothDepth = 0.8;
+      const toothHeight = 1.5;
+      const radius = 2.1;
+      const angleStep = (2 * Math.PI) / numTeeth;
+
+      for (let i = 0; i < numTeeth; i++) {
+        const angle = i * angleStep;
+      
+        const tooth = new THREE.Mesh(
+          new THREE.BoxGeometry(toothWidth, toothHeight, toothDepth),
+          new THREE.MeshStandardMaterial({ color: 0xffffff })
+        );
+      
+        const x = Math.cos(angle) * radius;
+        const z = Math.sin(angle) * radius;
+        tooth.position.set(x, 5, z);
+        tooth.lookAt(0, 5, 0);
+      
+        rook.add(tooth);
+      }
+      
+      animate();
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      rook.rotation.y += 0.01;
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>
